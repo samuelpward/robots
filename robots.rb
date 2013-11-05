@@ -1,6 +1,6 @@
 class Robot
-  @@grid_x = 4
-  @@grid_y = 4
+  @@grid_x = 4    # Sets the grid size
+  @@grid_y = 4    # NOTE: Also hardcoded into the run loop PLACE command. Please see below
   
   def initialize(x,y,facing)
     if (x.to_i >= 0 && x.to_i <= @@grid_x && y.to_i >= 0 && y.to_i <= @@grid_y && facing =~ /NORTH|SOUTH|EAST|WEST/) then
@@ -16,6 +16,8 @@ class Robot
         when "WEST"
           @facing = :west
       end
+    else
+      raise ArgumentError
     end
   end
   
@@ -59,9 +61,15 @@ end
 def run_robots(f)
   robot = nil
   while (line = f.gets)
-    if (line =~ /PLACE \d,\d,(NORTH|SOUTH|EAST|WEST)/)
-      place_var = line.split(' ')[1].split(',')
-      robot = Robot.new(place_var[0],place_var[1],place_var[2])
+    if (line =~ /PLACE \d,\d,(NORTH|SOUTH|EAST|WEST)/)  # Checks PLACE command is valid
+      place_var = line.split(' ')[1].split(',') # Takes everything after PLACE and splits it
+      x = place_var[0]
+      y = place_var[1]
+      begin
+        robot = Robot.new(x,y,place_var[2])
+      rescue
+        robot = nil # Sets robot back to nil if placed outside the grid
+      end
     else
       if robot
         case line.chomp.split(' ')[0]
