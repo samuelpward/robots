@@ -92,5 +92,9 @@ def run_robots(f)
 end
 
 if __FILE__==$0
-  run_robots(STDIN)
+  begin
+    run_robots(STDIN)
+  rescue SystemExit, Interrupt
+    puts "\n\nEXITING\n\n"
+  end
 end
