@@ -1,3 +1,10 @@
+$banner = "____       _           _
+|  _ \\ ___ | |__   ___ | |_ ___
+| |_) / _ \\| '_ \\ / _ \\| __/ __|
+|  _ < (_) | |_) | (_) | |_\\__ \\
+|_| \\_\\___/|_.__/ \\___/ \\__|___/
+"
+
 class Robot
   @@grid_x = 4    # Sets the grid size
   @@grid_y = 4    # NOTE: Also hardcoded into the run loop PLACE command. Please see below
@@ -60,6 +67,7 @@ end
 
 def run_robots(f)
   robot = nil
+  puts $banner
   while (line = f.gets)
     if (line =~ /PLACE \d,\d,(NORTH|SOUTH|EAST|WEST)/)  # Checks PLACE command is valid
       place_var = line.split(' ')[1].split(',') # Takes everything after PLACE and splits it
@@ -84,5 +92,9 @@ def run_robots(f)
 end
 
 if __FILE__==$0
-  run_robots(STDIN)
+  begin
+    run_robots(STDIN)
+  rescue SystemExit, Interrupt
+    puts "\n\nEXITING\n\n"
+  end
 end
